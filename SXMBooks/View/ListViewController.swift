@@ -12,23 +12,36 @@ protocol ListViewProtocol {
     var bookService : BookService { get set }
     var queryString: String { get set }
     
+    /// Called after debounce timer for search bar is fired.
     func fetchBooks()
+    
+    /// Called after getting the response for the search query.
+    ///
+    /// - Parameters:
+    ///   - books: The books array model.
     func populateBooks(_ books: Books)
 }
 
 class ListViewController: UITableViewController, ListViewProtocol {
-    
+    /// Reference  to Detail View Controller
     var detailViewController: DetailViewController? = nil
     
+    /// Initiating the SearchController
     let searchController = UISearchController(searchResultsController: nil)
 
+    /// Initiating the Data source for table view
     var books = [Item]()
     
+    /// Initiating the service for making the api calls
     var bookService = BookService()
     
+    /// Debounce timer needed for making the API calls at a specified interval.
+    /// Rather than for every charater enterd by user
     weak var debounceTimer: Timer?
     
+    /// Need this global var as we cannot pass the arguments to the @obj c selectors
     var queryString = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
